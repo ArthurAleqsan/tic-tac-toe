@@ -27,8 +27,8 @@ function whoStart(player) {
     closeModal();
 }
 function aiPlayer() {
-    let boardRandomElem = board[Math.floor(Math.random() * board.length )];
-    let item = document.getElementById(boardRandomElem);
+    const boardRandomElem = board[Math.floor(Math.random() * board.length )];
+    const item = document.getElementById(boardRandomElem);
     if(!board.length) return;
     addChar(item);
 }
