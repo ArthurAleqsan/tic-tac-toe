@@ -8,17 +8,7 @@
 </head>
 <body>
     <section class="main">
-        <div class="main-container">
-            <div class="main-container-item" id="0" onclick='addChar(this)'></div>
-            <div class="main-container-item" id="1" onclick='addChar(this)'></div>
-            <div class="main-container-item" id="2" onclick='addChar(this)'></div>
-            <div class="main-container-item" id="3" onclick='addChar(this)'></div>
-            <div class="main-container-item" id="4" onclick='addChar(this)'></div>
-            <div class="main-container-item" id="5" onclick='addChar(this)'></div>
-            <div class="main-container-item" id="6" onclick='addChar(this)'></div>
-            <div class="main-container-item" id="7" onclick='addChar(this)'></div>
-            <div class="main-container-item" id="8" onclick='addChar(this)'></div>
-        </div>
+        <div id="container" class="main-container"></div>
     </section>
     <div id="myModal" class="modal">
         <div class="modal-content">
@@ -28,10 +18,17 @@
             <div class="modal-content-body">
                 <p id="computer" onclick="whoStart(this)">Computer</p>
                 <p id="human" onclick="whoStart(this)">Human</p>
+                <div class="input-container">
+                    <label>choose size of board range of 3 to 50</label>
+                    <input type="number" id="num">
+                    <span class="err-msg">Invalid value</span>
+                </div>
+
+                <!--<button onclick="paintBoard()">Click me</button>-->
             </div>
         </div>
 
     </div>
-    <script src="./main.js"></script>
+    <script src="./js/script.js"></script>
 </body>
 </html>

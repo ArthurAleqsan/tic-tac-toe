@@ -2,14 +2,15 @@ const arr_X = [];
 const arr_O = [];
 const board = ["0","1","2","3","4","5","6","7","8"];
 const winComb = [
-  ["0","1","2"],
-  ["3","4","5"],
-  ["6","7","8"],
-  ["0","3","6"],
-  ["1","4","7"],
-  ["2","5","8"],
-  ["0","4","8"],
-  ["2","4","6"]
+  // ["0","1","2"],
+  // ["3","4","5"],
+  // ["6","7","8"],
+  // ["0","3","6"],
+  // ["1","4","7"],
+  // ["2","5","8"],
+  // ["0","4","8"],
+  // ["2","4","6"]
+  //   []
 ];
 let val;
 let indicator = false;
@@ -57,12 +58,30 @@ function addChar(item) {
     }
 }
 function _check(targetArr, player) {
-    for(let i = 0; i < winComb.length; i++) {
-        if(winComb[i].every(elem => targetArr.indexOf(elem) > -1)) {
+    // for(let i = 0; i < winComb.length; i++) {
+    //     if(winComb[i].every(elem => targetArr.indexOf(elem) > -1)) {
+    //         indicator = true;
+    //         _win(player);
+    //     }
+    // }
+    targetArr.sort((a, b) => a - b);
+    console.log(targetArr)
+    if(targetArr.every(num => {
+        console.log(+num + 3)
+        num = +num;
+        if(
+               targetArr.includes(num) && targetArr.includes(num + 1) && targetArr.includes(num + 2)
+            || targetArr.includes(num) && targetArr.includes(num + 3) && targetArr.includes(num + 6)
+            || targetArr.includes(num) && targetArr.includes(num + 4) && targetArr.includes(num + 8)
+        ) {
+            // return true;
+            console.log(num + 3)
+        }
+    })) {
             indicator = true;
             _win(player);
-        }
     }
+
 }
 function _win(winner) {
 
@@ -72,4 +91,13 @@ function _win(winner) {
 function closeModal() {
     const modal = document.querySelector('#myModal');
     modal.style.display = "none";
+}
+function findWinComb(num, arr) {
+    if(
+           arr.includes(num) && arr.includes(num + 1) && arr.includes(num + 2)
+        || arr.includes(num) && arr.includes(num + 3) && arr.includes(num + 6)
+        || arr.includes(num) && arr.includes(num + 4) && arr.includes(num + 8)
+    ) {
+        return true;
+    }
 }
