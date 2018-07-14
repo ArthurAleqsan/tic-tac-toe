@@ -7,6 +7,7 @@ var val = void 0;
 var indicator = false;
 var turn = true;
 var inputVal = void 0;
+var winComb = [];
 
 function whoStart(player) {
     inputVal = document.querySelector('#num').value;
@@ -26,9 +27,8 @@ function whoStart(player) {
 }
 
 function _paintBoard() {
-
     var container = document.querySelector('#container');
-
+    createWinCombs();
     closeModal();
     container.style.display = 'flex';
 
@@ -57,6 +57,7 @@ function aiPlayer() {
     addChar(item);
 }
 function addChar(item) {
+
     var lineNum = Math.ceil(+item.id / inputVal);
     if (!board.includes(item.id)) return;
     if ((arr_O.length + arr_X.length) % 2 === 0) {
@@ -72,7 +73,8 @@ function addChar(item) {
         arr_X = arr_X.map(function (elem) {
             return +elem;
         });
-        _check(+item.id, lineNum, arr_X, val);
+
+        _check(arr_X, val);
         turn = !turn;
         if (turn) aiPlayer();
     } else {
@@ -81,29 +83,58 @@ function addChar(item) {
         board.splice(board.indexOf(item.id), 1);
         if (indicator) return;
         item.innerHTML = val;
-        _check(+item.id, lineNum, arr_O, val);
+        _check(arr_O, val);
         turn = !turn;
         if (turn) aiPlayer();
     }
 }
-function _check(id, lineNum, targetArr, player) {
+function createWinCombs() {
     inputVal = +inputVal;
-    //horizontal checking
-    if (targetArr.includes(id) && targetArr.includes(id + 1) && targetArr.includes(id + 2) && (id + 2) / (lineNum * inputVal) <= 1 || targetArr.includes(id - 1) && targetArr.includes(id) && targetArr.includes(id + 1) && (id + 1) / (lineNum * inputVal) <= 1 || targetArr.includes(id - 2) && targetArr.includes(id - 1) && targetArr.includes(id) && id / (lineNum * inputVal) <= 1) {
-        _win(player);
+    var horizontalCombs = [];
+    var verticalCombs = [];
+    var a_to_z = new Array();
+    var z_to_a = [];
+    // Horizontal
+    for (var i = 0; i < inputVal; i++) {
+        horizontalCombs.push(new Array());
+        for (var row = 1; row < inputVal + 1; row++) {
+            horizontalCombs[i].push(i * inputVal + row);
+        }
     }
-    //vertical checking
-    else if (targetArr.includes(id) && targetArr.includes(id + inputVal) && targetArr.includes(id + 2 * inputVal) || targetArr.includes(id - inputVal) && targetArr.includes(id) && targetArr.includes(id + inputVal) || targetArr.includes(id - 2 * inputVal) && targetArr.includes(id - inputVal) && targetArr.includes(id)) {
+
+    //vertical
+    for (var _i = 0; _i < inputVal; _i++) {
+        verticalCombs.push(new Array());
+        for (var line = 1; line < inputVal * inputVal; line += inputVal) {
+            verticalCombs[_i].push(line + _i);
+        }
+    }
+
+    //diagonal A to Z
+    for (var _i2 = 1; _i2 < inputVal * inputVal + 1; _i2 += inputVal + 1) {
+        a_to_z.push(_i2);
+    }
+
+    //diagonal Z to A
+    for (var _i3 = inputVal; _i3 < inputVal * inputVal; _i3 += inputVal - 1) {
+        z_to_a.push(_i3);
+    }
+
+    winComb = winComb.concat(horizontalCombs);
+    winComb = winComb.concat(verticalCombs);
+    winComb.push(a_to_z);
+    winComb.push(z_to_a);
+}
+function _check(targetArr, player) {
+
+    for (var i = 0; i < winComb.length; i++) {
+        if (winComb[i].every(function (elem) {
+            return targetArr.indexOf(elem) > -1;
+        })) {
+            indicator = true;
             _win(player);
         }
-        // diagonal checking A to Z
-        else if (targetArr.includes(id) && targetArr.includes(id + inputVal + 1) && targetArr.includes(id + 2 * (inputVal + 1)) || targetArr.includes(id - (inputVal + 1)) && targetArr.includes(id) && targetArr.includes(id + inputVal + 1) || targetArr.includes(id - 2 * (inputVal + 1)) && targetArr.includes(id - (inputVal + 1)) && targetArr.includes(id)) {
-                _win(player);
-            }
-            //diagonal checking Z to A
-            else if (targetArr.includes(id) && targetArr.includes(id - (inputVal - 1)) && targetArr.includes(id - 2 * (inputVal - 1)) || targetArr.includes(id - (inputVal - 1)) && targetArr.includes(id) && targetArr.includes(id + (inputVal - 1)) || targetArr.includes(id + 2 * (inputVal - 1)) && targetArr.includes(id + (inputVal - 1)) && targetArr.includes(id)) {
-                    _win(player);
-                }
+    }
 }
 function _win(winner) {
 
